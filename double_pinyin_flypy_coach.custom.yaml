@@ -1,0 +1,92 @@
+patch:
+  # === 核心设定：修改方案ID和名称，防止和主方案冲突 ===
+  "schema/schema_id": double_pinyin_flypy_coach
+  "schema/name": "小鹤双拼·教练"
+
+  # === 优化1 & 2：输入框显示（去除方括号 + 零声母提示） ===
+  "translator/preedit_format":
+    # 2. 零声母特殊提示 (a->aa, o->oo, e->ee)
+    # 必须放在最前面，提示你需要打两下
+    - "xform/(^|[ '])([aoe])($|[ '])/$1$2($2)/"
+
+    # 1. 视觉降噪：去掉 [ ]，改用中间点 · 作为分隔
+    - xform/(^|[ '])a/$1a·/
+    - xform/(^|[ '])e/$1e·/
+    - xform/(^|[ '])o/$1o·/
+    - xform/([bpmfdtnljqx])n/$1iao·/
+    - xform/(\w)g/$1eng·/
+    - xform/(\w)q/$1iu·/
+    - xform/(\w)w/$1ei·/
+    - xform/([dtnlgkhjqxyvuirzcs])r/$1uan·/
+    - xform/(\w)t/$1ve·/
+    - xform/(\w)y/$1un·/
+    - xform/([dtnlgkhvuirzcs])o/$1uo·/
+    - xform/(\w)p/$1ie·/
+    - xform/([jqx])s/$1iong·/
+    - xform/(\w)s/$1ong·/
+    - xform/(\w)d/$1ai·/
+    - xform/(\w)f/$1en·/
+    - xform/(\w)h/$1ang·/
+    - xform/(\w)j/$1an·/
+    - xform/([gkhvuirzcs])k/$1uai·/
+    - xform/(\w)k/$1ing·/
+    - xform/([jqxnlb])l/$1iang·/
+    - xform/(\w)l/$1uang·/
+    - xform/(\w)z/$1ou·/
+    - xform/([gkhvuirzcs])x/$1ua·/
+    - xform/(\w)x/$1ia·/
+    - xform/(\w)c/$1ao·/
+    - xform/([dtgkhvuirzcs])v/$1ui·/
+    - xform/(\w)b/$1in·/
+    - xform/(\w)m/$1ian·/
+    - "xform/(^|[ '])v/$1zh·/"
+    - "xform/(^|[ '])i/$1ch·/"
+    - "xform/(^|[ '])u/$1sh·/"
+    # 清理末尾可能多余的点
+    - xform/·$//
+
+  # === 候选词配置：全拼转双拼码 ===
+  "engine/filters/@before 0": "" # 保持 corrector 开启，利用它吐出全拼
+  "translator/always_show_comments": true
+  "translator/comment_format":
+    # 清理 Lua 格式
+    - xform/［/ /
+    - xform/］/ /
+    - xform/^\s+//
+
+    # 翻译逻辑 (全拼 -> 双拼码)
+    - xform/iong/S/
+    - xform/uang/L/
+    - xform/iang/L/
+    - xform/ang/H/
+    - xform/eng/G/
+    - xform/ian/M/
+    - xform/iao/N/
+    - xform/ing/K/
+    - xform/uai/K/
+    - xform/ong/S/
+    - xform/uan/R/
+    - xform/van/R/
+    - xform/ve/T/
+    - xform/ue/T/
+    - xform/un/Y/
+    - xform/uo/O/
+    - xform/ie/P/
+    - xform/iu/Q/
+    - xform/ei/W/
+    - xform/ai/D/
+    - xform/en/F/
+    - xform/ou/Z/
+    - xform/ua/X/
+    - xform/ia/X/
+    - xform/ao/C/
+    - xform/ui/V/
+    - xform/in/B/
+    - xform/an/J/
+    - xform/zh/V/
+    - xform/ch/I/
+    - xform/sh/U/
+
+    # 转小写
+    - xform/([A-Z])/\L$1/
+    - xform/ //

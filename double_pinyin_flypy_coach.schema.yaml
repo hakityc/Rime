@@ -1,0 +1,23 @@
+# Rime schema
+# encoding: utf-8
+
+# 小鹤双拼教练版
+# 基于 double_pinyin_flypy 方案，添加双拼码提示功能，帮助练习双拼键位
+
+# 方案说明
+schema:
+  schema_id: double_pinyin_flypy_coach
+  name: "小鹤双拼·教练"
+  version: "1"
+  author:
+    - Dvel
+    - lebo (教练版改编)
+  description: |
+    小鹤双拼教练版
+    在候选词后显示双拼码，帮助记忆双拼键位
+  dependencies:
+    - melt_eng
+    - radical_pinyin
+
+# 继承小鹤双拼的所有配置
+__include: double_pinyin_flypy.schema:/
